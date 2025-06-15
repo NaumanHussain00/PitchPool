@@ -58,8 +58,8 @@ PitchPool_Backend/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/NaumanHussain00/PitchPool_Backend.git
-cd PitchPool_Backend
+git clone https://github.com/NaumanHussain00/PitchPool/backend.git
+cd PitchPool/backend
 ```
 
 ### 2. Install dependencies
