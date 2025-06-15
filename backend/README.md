@@ -58,7 +58,7 @@ PitchPool_Backend/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/NaumanHussain00/PitchPool/backend.git
+git clone https://github.com/NaumanHussain00/PitchPool.git
 cd PitchPool/backend
 ```
 
