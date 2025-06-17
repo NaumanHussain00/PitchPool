@@ -1,7 +1,11 @@
-import  { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
   const [role, setRole] = useState("pitcher");
+  const [isSignInForm, setIsSignInForm] = useState(false);
+  const Navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,33 +22,60 @@ const SignUpPage = () => {
     });
   };
 
+  const toggleSignInForm = () => {
+    setIsSignInForm(!isSignInForm);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSignInForm === false) {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: role,
+      };
 
-    const payload = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      role: role,
-    };
+      try {
+        const res = await fetch("http://localhost:8000/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
 
-    try {
-      const res = await fetch("http://localhost:8000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+        const result = await res.json();
+        console.log("Signup success:", result);
+        Navigate("/");
+      } catch (err) {
+        console.error("Signup failed:", err);
+      }
+    } else {
+      const payload = {
+        email: formData.email,
+        password: formData.password,
+      };
 
-      const result = await res.json();
-      console.log("Signup success:", result);
-    } catch (err) {
-      console.error("Signup failed:", err);
+      try {
+        const res = await fetch("http://localhost:8000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+        console.log("Signin success:", result);
+        Navigate("/");
+      } catch (err) {
+        console.error("Signin failed:", err);
+      }
     }
   };
 
@@ -82,14 +113,16 @@ const SignUpPage = () => {
         </div>
 
         <form className="space-y-5 mt-4" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl bg-gray-100 border border-gray-200"
-          />
+          {!isSignInForm && (
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-gray-100 border border-gray-200"
+            />
+          )}
           <input
             type="email"
             name="email"
@@ -110,18 +143,23 @@ const SignUpPage = () => {
             type="submit"
             className="w-full bg-[#aeddb6] text-lg font-semibold text-black py-3 rounded-xl hover:scale-105 transition"
           >
-            Sign Up as {role}
+            {isSignInForm ? "Sign In as " + role : "Sign Up as " + role}
           </button>
         </form>
 
-        <p className="text-sm text-center text-gray-500">
-          Already have an account?{" "}
-          <a
+        <p
+          className="text-sm text-center text-gray-500"
+          onClick={toggleSignInForm}
+        >
+          {isSignInForm
+            ? "New to Pitchpool? Sign Up now"
+            : "Already registered? Sign In now"}
+          {/* <a
             href="/login"
             className="text-[#aeddb6] font-medium hover:underline"
           >
             Login
-          </a>
+          </a> */}
         </p>
       </div>
     </div>
