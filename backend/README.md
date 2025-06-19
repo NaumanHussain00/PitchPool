@@ -84,7 +84,7 @@ Server will run on: http://localhost:8000
 ## 🛠️ API Endpoints Overview
 
 ## Auth Routes
-- `POST /api/auth/signup` – Register as Pitcher or Investor
+- `POST /api/auth/register` – Register as Pitcher or Investor
 - `POST /api/auth/login` – Login and receive JWT
 
 ## Startup Routes
