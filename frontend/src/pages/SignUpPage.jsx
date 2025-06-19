@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/userSlice";
 
 const SignUpPage = () => {
   const [role, setRole] = useState("pitcher");
   const [isSignInForm, setIsSignInForm] = useState(false);
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +21,6 @@ const SignUpPage = () => {
       name: "",
       email: "",
       password: "",
-      extra: "",
     });
   };
 
@@ -50,8 +52,21 @@ const SignUpPage = () => {
         });
 
         const result = await res.json();
+        dispatch(
+          addUser({
+            _id: result._id,
+            name: result.name,
+            email: result.email,
+            role: result.role,
+            token: result.token,
+          })
+        );
         console.log("Signup success:", result);
-        Navigate("/");
+        if (result.role === "pitcher") {
+          Navigate("/create-pitcher-profile");
+        } else if (result.role === "investor") {
+          Navigate("/create-investor-profile");
+        }
       } catch (err) {
         console.error("Signup failed:", err);
       }
@@ -71,6 +86,15 @@ const SignUpPage = () => {
         });
 
         const result = await res.json();
+        dispatch(
+          addUser({
+            _id: result._id,
+            name: result.name,
+            email: result.email,
+            role: result.role,
+            token: result.token,
+          })
+        );
         console.log("Signin success:", result);
         Navigate("/");
       } catch (err) {
@@ -83,10 +107,10 @@ const SignUpPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#ececec] px-4">
       <div className="max-w-md w-full bg-[#141414] rounded-3xl shadow-xl p-8 md:p-10 space-y-6">
         <h2 className="text-3xl font-bold text-center text-[#aeddb6]">
-          Join Pitchpool 🚀
+          Join PitchPool 🚀
         </h2>
         <p className="text-center text-white text-sm">
-          Sign up as a pitcher or Investor
+          {isSignInForm ? "Sign In" : "Sign Up"} as a Pitcher or Investor
         </p>
 
         <div className="flex justify-center gap-4">
@@ -98,7 +122,7 @@ const SignUpPage = () => {
                 : "bg-white text-gray-600 border-gray-300"
             }`}
           >
-            🚀 pitcher
+            🚀 Pitcher
           </button>
           <button
             onClick={() => handleRoleChange("investor")}
@@ -143,17 +167,19 @@ const SignUpPage = () => {
             type="submit"
             className="w-full bg-[#aeddb6] text-lg font-semibold text-black py-3 rounded-xl hover:scale-105 transition"
           >
-            {isSignInForm ? "Sign In as " + role : "Sign Up as " + role}
+            {isSignInForm
+              ? "Sign In as " + role.charAt(0).toUpperCase() + role.slice(1)
+              : "Sign Up as " + role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         </form>
 
         <p
-          className="text-sm text-center text-gray-500"
+          className="text-sm text-center text-gray-500 hover:cursor-pointer"
           onClick={toggleSignInForm}
         >
           {isSignInForm
-            ? "New to Pitchpool? Sign Up now"
-            : "Already registered? Sign In now"}
+            ? "New to PitchPool? Sign Up now"
+            : "Already Registered? Sign In now"}
           {/* <a
             href="/login"
             className="text-[#aeddb6] font-medium hover:underline"

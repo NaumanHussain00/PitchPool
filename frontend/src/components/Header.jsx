@@ -5,8 +5,8 @@ const Header = () => {
     <header className="w-full flex justify-center pt-6">
       <div className="bg-[#141414] rounded-full shadow-md px-6 py-3 flex items-center space-x-8">
         {/* Logo */}
-        <div className="text-lg font-semibold text-[#aeddb6] pl-2 pr-6">
-          Pitchpool
+        <div className="text-xl font-semibold text-[#aeddb6] pl-2 pr-6">
+          PitchPool
         </div>
 
         {/* Nav Links */}
@@ -29,7 +29,7 @@ const Header = () => {
         </nav>
 
         <Link to={"/signup"}>
-          <button className="ml-6 bg-[#aeddb6] text-[#141414] px-5 py-2 rounded-full text-sm font-semibold hover:scale-105 transition">
+          <button className="ml-6 bg-[#aeddb6] text-[#141414] px-5 py-2 rounded-full text-sm font-semibold hover:scale-105 transition hover:cursor-pointer">
             SignUp →
           </button>
         </Link>
